@@ -14,6 +14,7 @@
 		B15C545E1AC10509006F1A93 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B15C545C1AC10509006F1A93 /* LaunchScreen.xib */; };
 		B15C546A1AC10509006F1A93 /* FaceSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B15C54691AC10509006F1A93 /* FaceSetTests.m */; };
 		B15C54761AC10792006F1A93 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B15C54751AC10792006F1A93 /* AVFoundation.framework */; };
+		B15C54791AC11A8B006F1A93 /* FaceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B15C54781AC11A8B006F1A93 /* FaceCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		B15C54681AC10509006F1A93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B15C54691AC10509006F1A93 /* FaceSetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FaceSetTests.m; sourceTree = "<group>"; };
 		B15C54751AC10792006F1A93 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		B15C54771AC11A8B006F1A93 /* FaceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceCell.h; sourceTree = "<group>"; };
+		B15C54781AC11A8B006F1A93 /* FaceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +90,8 @@
 				B15C54521AC10509006F1A93 /* AppDelegate.m */,
 				B15C54541AC10509006F1A93 /* ViewController.h */,
 				B15C54551AC10509006F1A93 /* ViewController.m */,
+				B15C54771AC11A8B006F1A93 /* FaceCell.h */,
+				B15C54781AC11A8B006F1A93 /* FaceCell.m */,
 				B15C545A1AC10509006F1A93 /* Images.xcassets */,
 				B15C545C1AC10509006F1A93 /* LaunchScreen.xib */,
 				B15C544D1AC10509006F1A93 /* Supporting Files */,
@@ -219,6 +224,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B15C54791AC11A8B006F1A93 /* FaceCell.m in Sources */,
 				B15C54561AC10509006F1A93 /* ViewController.m in Sources */,
 				B15C54531AC10509006F1A93 /* AppDelegate.m in Sources */,
 				B15C54501AC10509006F1A93 /* main.m in Sources */,
@@ -404,6 +410,7 @@
 				B15C546F1AC10509006F1A93 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B15C54701AC10509006F1A93 /* Build configuration list for PBXNativeTarget "FaceSetTests" */ = {
 			isa = XCConfigurationList;
@@ -412,6 +419,7 @@
 				B15C54721AC10509006F1A93 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
