@@ -9,8 +9,10 @@
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
 
+NSString *CellReuseIdentifier = @"Cell";
 
-@interface ViewController ()
+
+@interface ViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic) CIDetector *faceDetector;
 
@@ -20,8 +22,7 @@
 
 @property (nonatomic) NSTimer *imageTimer;
 
-@property (nonatomic) UIImage *image;
-@property (nonatomic, copy) NSArray *faceFeatures;
+@property (nonatomic, copy) NSArray *faceImages;
 
 @end
 
@@ -29,11 +30,16 @@
 @implementation ViewController
 
 - (instancetype)init {
-  return [self initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+  UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+  layout.itemSize = (CGSize) { .height = 300, .width = 300 };
+  return [self initWithCollectionViewLayout:layout];
 }
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+
+  [self.collectionView registerClass:UICollectionViewCell.class forCellWithReuseIdentifier:CellReuseIdentifier];
+
 
   self.faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:nil];
 
@@ -76,15 +82,61 @@
 
 - (void)captureImage {
   [self.imageOutput captureStillImageAsynchronouslyFromConnection:self.imageOutput.connections[0] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+    if (error) { return; }
+
     NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
     CIImage *image = [CIImage imageWithData:imageData];
     NSArray *faceFeatures = [self.faceDetector featuresInImage:image];
 
-    self.image = [UIImage imageWithCIImage:image];
-    self.faceFeatures = faceFeatures;
-
-    NSLog(@"%@", faceFeatures);
+    if (faceFeatures.count) {
+      [self updateWithImage:image faceFeatures:faceFeatures];
+    }
   }];
+}
+
+- (void)updateWithImage:(CIImage *)image faceFeatures:(NSArray *)faceFeatures {
+
+  NSMutableArray *accumulatingImages = [NSMutableArray array];
+
+  for (CIFeature *feature in faceFeatures) {
+    NSLog(@"Feature: %@", NSStringFromCGRect(feature.bounds));
+    CIImage *croppedImage = [image imageByCroppingToRect:CGRectIntegral(feature.bounds)];
+    UIImage *croppedUIImage = [UIImage imageWithCIImage:croppedImage];
+    [accumulatingImages addObject:croppedUIImage];
+  }
+
+  self.faceImages = accumulatingImages;
+
+  [self.collectionView reloadData];
+}
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+  return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+  return self.faceImages.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+  UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellReuseIdentifier
+                                                                         forIndexPath:indexPath];
+
+  static NSInteger HackyTag = 32641294; // FIXME
+
+  UIImageView *cellImageView = (UIImageView *)[cell viewWithTag:HackyTag];
+
+  if (cellImageView == nil) {
+    CGSize itemSize = [(UICollectionViewFlowLayout *)self.collectionViewLayout itemSize];
+    cellImageView = [[UIImageView alloc] initWithFrame:(CGRect) { .origin = CGPointZero, .size = itemSize }];
+    cellImageView.contentMode = UIViewContentModeScaleAspectFit;
+    cellImageView.tag = HackyTag;
+    [cell.contentView addSubview:cellImageView];
+  }
+
+  cellImageView.image = self.faceImages[indexPath.item];
+
+  return cell;
 }
 
 @end
