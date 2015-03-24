@@ -12,6 +12,7 @@
 
 NSString *CellReuseIdentifier = @"Cell";
 CGSize ItemSize = (CGSize) { .height = 200, .width = 200 };
+int MagicPortraitOrientationNumberOfSadness = 5; // Don't ask.
 
 @interface ViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -20,6 +21,7 @@ CGSize ItemSize = (CGSize) { .height = 200, .width = 200 };
 @property (nonatomic) AVCaptureSession *captureSession;
 @property (nonatomic) AVCaptureInput *cameraInput;
 @property (nonatomic) AVCaptureStillImageOutput *imageOutput;
+@property (nonatomic) AVCaptureConnection *connection;
 
 @property (nonatomic) NSTimer *imageTimer;
 
@@ -108,6 +110,8 @@ CGSize ItemSize = (CGSize) { .height = 200, .width = 200 };
   self.captureSession = [[AVCaptureSession alloc] init];
   [self.captureSession addInput:self.cameraInput];
   [self.captureSession addOutput:self.imageOutput];
+
+  self.connection = [self.imageOutput connectionWithMediaType:AVMediaTypeVideo];
 }
 
 // Start updates, at the beginning or after interruptions. (There's always interruptions in mobile.)
@@ -128,12 +132,13 @@ CGSize ItemSize = (CGSize) { .height = 200, .width = 200 };
 
 // This function is fired by timer and does all the "update stuff"
 - (void)captureImage {
-  [self.imageOutput captureStillImageAsynchronouslyFromConnection:self.imageOutput.connections[0] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+  [self.imageOutput captureStillImageAsynchronouslyFromConnection:self.connection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
     if (error) { NSLog(@"Capture error: %@", error.localizedDescription); return; }
 
     NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
     CIImage *image = [CIImage imageWithData:imageData];
-    NSArray *faceFeatures = [self.faceDetector featuresInImage:image];
+    NSArray *faceFeatures = [self.faceDetector featuresInImage:image
+                                                       options:@{ CIDetectorImageOrientation : @(MagicPortraitOrientationNumberOfSadness) }];
 
     if (faceFeatures.count) {
       [self updateWithImage:image faceFeatures:faceFeatures];
@@ -148,7 +153,8 @@ CGSize ItemSize = (CGSize) { .height = 200, .width = 200 };
 
   for (CIFeature *feature in faceFeatures) {
     NSLog(@"Feature: %@", NSStringFromCGRect(feature.bounds));
-    CIImage *croppedImage = [image imageByCroppingToRect:CGRectIntegral(feature.bounds)];
+    CIImage *croppedImage = [[image imageByCroppingToRect:CGRectIntegral(feature.bounds)]
+                             imageByApplyingOrientation:MagicPortraitOrientationNumberOfSadness];
     UIImage *croppedUIImage = [UIImage imageWithCIImage:croppedImage];
     [accumulatingImages addObject:croppedUIImage];
   }
