@@ -13,6 +13,7 @@
 		B15C545B1AC10509006F1A93 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B15C545A1AC10509006F1A93 /* Images.xcassets */; };
 		B15C545E1AC10509006F1A93 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B15C545C1AC10509006F1A93 /* LaunchScreen.xib */; };
 		B15C546A1AC10509006F1A93 /* FaceSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B15C54691AC10509006F1A93 /* FaceSetTests.m */; };
+		B15C54761AC10792006F1A93 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B15C54751AC10792006F1A93 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		B15C54631AC10509006F1A93 /* FaceSetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FaceSetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B15C54681AC10509006F1A93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B15C54691AC10509006F1A93 /* FaceSetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FaceSetTests.m; sourceTree = "<group>"; };
+		B15C54751AC10792006F1A93 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B15C54761AC10792006F1A93 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +64,7 @@
 		B15C54411AC10509006F1A93 = {
 			isa = PBXGroup;
 			children = (
+				B15C54751AC10792006F1A93 /* AVFoundation.framework */,
 				B15C544C1AC10509006F1A93 /* FaceSet */,
 				B15C54661AC10509006F1A93 /* FaceSetTests */,
 				B15C544B1AC10509006F1A93 /* Products */,
